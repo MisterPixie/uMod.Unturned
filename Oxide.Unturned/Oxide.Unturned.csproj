@@ -39,7 +39,7 @@
     <Reference Include="UnityEngine">
       <HintPath>Dependencies\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
-    <None Remove="DepotDownloader.config; Bundle\**; Files\**; Patched\**" />
+    <None Remove="Bundle\**; Files\**; Patched\**; *.config; *.opj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="Clean">
@@ -61,12 +61,12 @@
     <ItemGroup>
       <CoreFiles Include="$(TargetDir)\Oxide.*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Dependencies\$(ManagedDir)\Assembly-CSharp.dll" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.csharp\**\content\*.*" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.references\**\content\*.*" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.mysql\**\lib\$(TargetFramework)\*.*; $(SolutionDir)\packages\oxide.mysql\**\content\*.*" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.sqlite\**\lib\$(TargetFramework)\*.*; $(SolutionDir)\packages\oxide.sqlite\**\content\*.*" />
-      <ContentX64Files Include="$(SolutionDir)\packages\oxide.references\**\content\x64\*.*" />
-      <ContentX86Files Include="$(SolutionDir)\packages\oxide.references\**\content\x86\*.*" />
+      <ContentFiles Include="$(SolutionDir)\packages\oxide.csharp\**\lib\any\*.*" />
+      <ContentFiles Include="$(SolutionDir)\packages\oxide.references\**\lib\any\*.*" />
+      <ContentFiles Include="$(SolutionDir)\packages\oxide.mysql\**\lib\$(TargetFramework)\*.*; $(SolutionDir)\packages\oxide.mysql\**\lib\any\*.*" />
+      <ContentFiles Include="$(SolutionDir)\packages\oxide.sqlite\**\lib\$(TargetFramework)\*.*; $(SolutionDir)\packages\oxide.sqlite\**\lib\any\*.*" />
+      <ContentX64Files Include="$(SolutionDir)\packages\oxide.references\**\lib\any\x64\*.*" />
+      <ContentX86Files Include="$(SolutionDir)\packages\oxide.references\**\lib\any\x86\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(CoreFiles)" DestinationFiles="@(CoreFiles->'$(ProjectDir)\Bundle\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(ProjectDir)\Bundle\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
