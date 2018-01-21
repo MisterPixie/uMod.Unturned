@@ -121,7 +121,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "vZyFVt22eT2bUmWlopsNYE0lHMabjq0h7jTNtmwkP2E=",
+            "MSILHash": "5N1Z1UF4MmocoQUGk4U1Fp6/CMjOOJHhUG5fkPaBhEc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -153,7 +153,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 137,
+            "InjectionIndex": 159,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -174,7 +174,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "oCpDo6BdpvsX9qBXnPvEjU+sS2C68kqYsRJzXi7sjZI=",
+            "MSILHash": "otHxaseT/WyI2CvOeX2ZGAD+vSyMZJWbOTYDEvwdxDE=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -182,7 +182,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 231,
+            "InjectionIndex": 253,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -198,7 +198,7 @@
               {
                 "OpCode": "ldstr",
                 "OpType": "String",
-                "Operand": ",oxide,modded"
+                "Operand": ",modded,oxide"
               },
               {
                 "OpCode": "stelem_ref",
@@ -218,7 +218,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "oCpDo6BdpvsX9qBXnPvEjU+sS2C68kqYsRJzXi7sjZI=",
+            "MSILHash": "otHxaseT/WyI2CvOeX2ZGAD+vSyMZJWbOTYDEvwdxDE=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
@@ -262,12 +262,14 @@
                 "System.Int32",
                 "System.Int32",
                 "System.Int32[]",
+                "System.String[]",
+                "System.String[]",
                 "SDG.Unturned.EPlayerSkillset",
                 "System.String",
                 "Steamworks.CSteamID"
               ]
             },
-            "MSILHash": "FKZLTexBWIRM4rXFbNvgN7pFwV6nFWHpvD23Myei6sQ=",
+            "MSILHash": "f2SZr1TH0j1+K9GHsYGPXFPXuDzw4PdoAZ53GWkYHdQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
