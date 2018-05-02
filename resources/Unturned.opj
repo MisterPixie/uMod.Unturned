@@ -153,7 +153,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 159,
+            "InjectionIndex": 160,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -174,7 +174,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "otHxaseT/WyI2CvOeX2ZGAD+vSyMZJWbOTYDEvwdxDE=",
+            "MSILHash": "4neHpQoFfcvl5rQKpPmMmF/iQxXfu2DiHStcIg8yao0=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -182,7 +182,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 253,
+            "InjectionIndex": 254,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -218,7 +218,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "otHxaseT/WyI2CvOeX2ZGAD+vSyMZJWbOTYDEvwdxDE=",
+            "MSILHash": "4neHpQoFfcvl5rQKpPmMmF/iQxXfu2DiHStcIg8yao0=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
