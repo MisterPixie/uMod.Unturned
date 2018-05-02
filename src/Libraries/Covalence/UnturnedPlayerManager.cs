@@ -54,8 +54,6 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
                 playerData.Add(id, record);
                 allPlayers.Add(id, new UnturnedPlayer(userId, name));
             }
-
-            ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
         internal void PlayerConnected(SteamPlayer steamPlayer)
