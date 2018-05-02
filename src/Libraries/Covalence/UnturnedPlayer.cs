@@ -22,7 +22,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         internal UnturnedPlayer(ulong id, string name)
         {
             // Get perms library
-            if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
+            if (libPerms == null)
+            {
+                libPerms = Interface.Oxide.GetLibrary<Permission>();
+            }
 
             // Store user details
             Name = name.Sanitize();
@@ -105,7 +108,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Returns if the player is connected
         /// </summary>
-        public bool IsConnected => UnityEngine.Time.realtimeSinceStartup - steamPlayer.lastNet < Provider.CLIENT_TIMEOUT;
+        public bool IsConnected => UnityEngine.Time.realtimeSinceStartup - steamPlayer.timeLastPacketWasReceivedFromClient < Provider.CLIENT_TIMEOUT;
 
         /// <summary>
         /// Returns if the player is sleeping
@@ -129,7 +132,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
             // Check if already banned
-            if (IsBanned) return;
+            if (IsBanned)
+            {
+                return;
+            }
 
             // Ban and kick user
             Provider.ban(cSteamId, reason, (uint)duration.TotalSeconds);
@@ -142,7 +148,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         {
             get
             {
-                var id = SteamBlacklist.list.First(e => e.playerID.ToString() == Id);
+                SteamBlacklistID id = SteamBlacklist.list.First(e => e.playerID.ToString() == Id);
                 return TimeSpan.FromSeconds(id.duration);
             }
         }
@@ -158,8 +164,8 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public float Health
         {
-            get { return steamPlayer.player.life.health; }
-            set { steamPlayer.player.life.tellHealth(cSteamId, (byte)value); }
+            get => steamPlayer.player.life.health;
+            set => steamPlayer.player.life.tellHealth(cSteamId, (byte)value);
         }
 
         /// <summary>
@@ -215,7 +221,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <param name="z"></param>
         public void Teleport(float x, float y, float z)
         {
-            var angle = steamPlayer.player.transform.rotation.eulerAngles.y;
+            float angle = steamPlayer.player.transform.rotation.eulerAngles.y;
             steamPlayer.player.sendTeleport(new Vector3(x, y, z), MeasurementTool.angleToByte(angle));
         }
 
@@ -231,7 +237,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Unban()
         {
             // Check if unbanned already
-            if (!IsBanned) return;
+            if (!IsBanned)
+            {
+                return;
+            }
 
             // Set to unbanned
             SteamBlacklist.unban(cSteamId);
@@ -249,7 +258,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            var pos = steamPlayer.player.transform.position;
+            Vector3 pos = steamPlayer.player.transform.position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -261,7 +270,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            var pos = steamPlayer.player.transform.position;
+            Vector3 pos = steamPlayer.player.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
@@ -278,7 +287,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Message(string message, string prefix, params object[] args)
         {
             message = args.Length > 0 ? string.Format(Formatter.ToUnity(message), args) : Formatter.ToUnity(message);
-            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            string formatted = prefix != null ? $"{prefix} {message}" : message;
             ChatManager.say(cSteamId, formatted, Color.white, EChatMode.LOCAL);
         }
 

@@ -78,20 +78,32 @@ namespace Oxide.Game.Unturned
             AddCovalenceCommand(new[] { "oxide.version", "o.version" }, "VersionCommand");
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (KeyValuePair<string, Dictionary<string, string>> language in Localization.languages)
+            {
+                lang.RegisterMessages(language.Value, this, language.Key);
+            }
 
             // Setup default permission groups
             if (permission.IsLoaded)
             {
-                var rank = 0;
-                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
-                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                int rank = 0;
+                foreach (string defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
+                {
+                    if (!permission.GroupExists(defaultGroup))
+                    {
+                        permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                    }
+                }
 
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    if (!ulong.TryParse(s, out temp)) return false;
-                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                    if (!ulong.TryParse(s, out temp))
+                    {
+                        return false;
+                    }
+
+                    int digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
 
@@ -107,7 +119,10 @@ namespace Oxide.Game.Unturned
         private void OnPluginLoaded(Plugin plugin)
         {
             // Call OnServerInitialized for hotloaded plugins
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+            if (serverInitialized)
+            {
+                plugin.CallHook("OnServerInitialized");
+            }
         }
 
         /// <summary>
@@ -116,7 +131,10 @@ namespace Oxide.Game.Unturned
         [HookMethod("OnServerInitialized")]
         private void OnServerInitialized()
         {
-            if (serverInitialized) return;
+            if (serverInitialized)
+            {
+                return;
+            }
 
             Analytics.Collect();
             UnturnedExtension.ServerConsole();
@@ -155,7 +173,11 @@ namespace Oxide.Game.Unturned
         /// <returns></returns>
         private bool PermissionsLoaded(IPlayer player)
         {
-            if (permission.IsLoaded) return true;
+            if (permission.IsLoaded)
+            {
+                return true;
+            }
+
             player.Reply(string.Format(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message));
             return false;
         }

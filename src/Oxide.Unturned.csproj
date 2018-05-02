@@ -24,8 +24,10 @@
     -->
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'Windows_NT'">C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'OSX'">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/2.0-api</FrameworkPathOverride>
+    <ThisAssemblyNamespace>Oxide.Game.Unturned</ThisAssemblyNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="GitInfo" Version="2.0.*" />
     <PackageReference Include="Oxide.References" Version="2.0.*" />
     <PackageReference Include="Oxide.Core" Version="2.0.*" />
     <PackageReference Include="Oxide.CSharp" Version="2.0.*" />
@@ -47,11 +49,11 @@
   <Target Name="Clean">
     <RemoveDir Directories="$(ProjectDir)\bin\Bundle\$(PackageId)" Condition="Exists('$(ProjectDir)\bin\Bundle\$(PackageId)')" />
   </Target>
-  <Target Name="Build" Condition="('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir).steamlogin')" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
+  <Target Name="Build" Condition="('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir)\.steamlogin')" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
-        <Aliases>Oxide</Aliases>
+        <Aliases>References</Aliases>
       </ReferencePath>
     </ItemGroup>
   </Target>
