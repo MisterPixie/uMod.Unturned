@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 15.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oxide.Unturned", "Oxide.Unturned\Oxide.Unturned.csproj", "{C02DE4ED-D073-47E6-845C-3A21203A6F02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oxide.Unturned", "src\Oxide.Unturned.csproj", "{C02DE4ED-D073-47E6-845C-3A21203A6F02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

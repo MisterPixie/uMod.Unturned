@@ -24,8 +24,10 @@
     -->
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'Windows_NT'">C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'OSX'">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/2.0-api</FrameworkPathOverride>
+    <ThisAssemblyNamespace>Oxide.Game.Unturned</ThisAssemblyNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="GitInfo" Version="2.0.*" />
     <PackageReference Include="Oxide.References" Version="2.0.*" />
     <PackageReference Include="Oxide.Core" Version="2.0.*" />
     <PackageReference Include="Oxide.CSharp" Version="2.0.*" />
@@ -33,49 +35,49 @@
     <PackageReference Include="Oxide.SQLite" Version="2.0.*" />
     <PackageReference Include="Oxide.Unity" Version="2.0.*" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>Dependencies\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+      <HintPath>Dependencies\Patched\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Dependencies\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>Dependencies\Patched\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>Dependencies\$(ManagedDir)\UnityEngine.dll</HintPath>
+      <HintPath>Dependencies\Patched\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
-    <None Remove="Bundle\**; Files\**; Patched\**; *.config; *.opj" />
+    <None Remove="Bundle\**; Files\**; Patched\**; **\Original\**; *.config; *.opj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="Clean">
-    <RemoveDir Directories="$(ProjectDir)\bin" Condition="Exists('$(ProjectDir)\bin')" />
+    <RemoveDir Directories="$(ProjectDir)\bin\Bundle\$(PackageId)" Condition="Exists('$(ProjectDir)\bin\Bundle\$(PackageId)')" />
   </Target>
-  <Target Name="Build" Condition="('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir).steamlogin')" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
+  <Target Name="Build" Condition="('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir)\.steamlogin')" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
-        <Aliases>Oxide</Aliases>
+        <Aliases>References</Aliases>
       </ReferencePath>
     </ItemGroup>
   </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
-    <Exec Command="powershell -ExecutionPolicy Bypass $(SolutionDir)\Steam.ps1 -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch '$(SteamBranch)' -managed '$(ManagedDir)' -access $(SteamLogin)" />
+    <Exec Command="powershell -ExecutionPolicy Bypass &quot;$(SolutionDir)\Steam.ps1&quot; -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch '$(SteamBranch)' -managed '$(ManagedDir)' -access $(SteamLogin)" />
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
       <CoreFiles Include="$(TargetDir)\Oxide.*.dll" />
-      <PatchedFiles Include="$(ProjectDir)\Dependencies\$(ManagedDir)\Assembly-CSharp.dll" />
+      <PatchedFiles Include="$(ProjectDir)\Dependencies\Patched\$(ManagedDir)\Assembly-CSharp.dll" />
       <ContentFiles Include="$(SolutionDir)\packages\oxide.csharp\**\lib\any\*.*" />
       <ContentFiles Include="$(SolutionDir)\packages\oxide.references\**\lib\any\*.*" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.mysql\**\lib\$(TargetFramework)\*.*; $(SolutionDir)\packages\oxide.mysql\**\lib\any\*.*" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.sqlite\**\lib\$(TargetFramework)\*.*; $(SolutionDir)\packages\oxide.sqlite\**\lib\any\*.*" />
-      <ContentX64Files Include="$(SolutionDir)\packages\oxide.references\**\lib\any\x64\*.*" />
-      <ContentX86Files Include="$(SolutionDir)\packages\oxide.references\**\lib\any\x86\*.*" />
+      <ContentFiles Include="$(SolutionDir)\packages\oxide.mysql\**\lib\any\*.*; $(SolutionDir)\packages\oxide.mysql\**\lib\$(TargetFramework)\*.*" />
+      <ContentFiles Include="$(SolutionDir)\packages\oxide.sqlite\**\lib\any\*.*; $(SolutionDir)\packages\oxide.sqlite\**\lib\$(TargetFramework)\*.*" />
+      <ContentX64Files Include="$(SolutionDir)\packages\oxide.references\**\lib\any\x64\*.*; $(SolutionDir)\packages\oxide.sqlite\**\lib\any\x64\*.*" />
+      <ContentX86Files Include="$(SolutionDir)\packages\oxide.references\**\lib\any\x86\*.*; $(SolutionDir)\packages\oxide.sqlite\**\lib\any\x86\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(CoreFiles)" DestinationFiles="@(CoreFiles->'$(ProjectDir)\bin\Bundle\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(ProjectDir)\bin\Bundle\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ContentFiles)" DestinationFiles="@(ContentFiles->'$(ProjectDir)\bin\Bundle\$(ManagedDir)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ContentX64Files)" DestinationFiles="@(ContentX64Files->'$(ProjectDir)\bin\Bundle\$(ManagedDir)\x64\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ContentX86Files)" DestinationFiles="@(ContentX86Files->'$(ProjectDir)\bin\Bundle\$(ManagedDir)\x86\%(Filename)%(Extension)')" />
-    <!--<Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />-->
+    <Copy SourceFiles="@(CoreFiles)" DestinationFiles="@(CoreFiles->'$(ProjectDir)\bin\Bundle\$(PackageId)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(ProjectDir)\bin\Bundle\$(PackageId)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ContentFiles)" DestinationFiles="@(ContentFiles->'$(ProjectDir)\bin\Bundle\$(PackageId)\$(ManagedDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ContentX64Files)" DestinationFiles="@(ContentX64Files->'$(ProjectDir)\bin\Bundle\$(PackageId)\$(ManagedDir)\x64\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ContentX86Files)" DestinationFiles="@(ContentX86Files->'$(ProjectDir)\bin\Bundle\$(PackageId)\$(ManagedDir)\x86\%(Filename)%(Extension)')" />
+    <!--<Exec Command="pdb2mdb %(PatchedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />-->
   </Target>
   <Target Name="LocalDeploy" AfterTargets="AfterBuild" Condition="Exists('$(SolutionDir)\.deploy')">
     <Exec Command="start /b /wait taskkill /f /im Unturned.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
@@ -84,7 +86,7 @@
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
     <ItemGroup>
-      <DeployFiles Include="$(ProjectDir)\bin\Bundle\**\*.*" />
+      <DeployFiles Include="$(ProjectDir)\bin\Bundle\$(PackageId)\**\*.*" />
     </ItemGroup>
     <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>

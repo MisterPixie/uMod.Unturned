@@ -43,6 +43,11 @@ namespace Oxide.Game.Unturned
         public override VersionNumber Version => AssemblyVersion;
 
         /// <summary>
+        /// Gets the branch of this extension
+        /// </summary>
+        public override string Branch => "public"; // TODO: Handle this programmatically
+
+        /// <summary>
         /// Default game-specific references for use in plugins
         /// </summary>
         internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
@@ -107,7 +112,10 @@ namespace Oxide.Game.Unturned
 
             CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
 
-            if (!Interface.Oxide.EnableConsole()) return;
+            if (!Interface.Oxide.EnableConsole())
+            {
+                return;
+            }
 
             Application.logMessageReceived += HandleLog;
 
@@ -116,47 +124,56 @@ namespace Oxide.Game.Unturned
 
         internal static void ServerConsole()
         {
-            if (Interface.Oxide.ServerConsole == null) return;
+            if (Interface.Oxide.ServerConsole == null)
+            {
+                return;
+            }
 
             Interface.Oxide.ServerConsole.Title = () => $"{Provider.clients.Count} | {Provider.serverName}";
 
             Interface.Oxide.ServerConsole.Status1Left = () => Provider.serverName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                TimeSpan time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                string uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
 
             Interface.Oxide.ServerConsole.Status2Left = () => $"{Provider.clients.Count}/{Provider.maxPlayers} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                var bytesReceived = Utility.FormatBytes(Provider.bytesReceived);
-                var bytesSent = Utility.FormatBytes(Provider.bytesSent);
+                string bytesReceived = Utility.FormatBytes(Provider.bytesReceived);
+                string bytesSent = Utility.FormatBytes(Provider.bytesSent);
                 return Provider.time <= 0 ? "0b/s in, 0b/s out" : $"{bytesReceived}/s in, {bytesSent}/s out";
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var gameTime = DateTime.Today.AddSeconds(LightingManager.time * 120).ToString("h:mm tt");
+                string gameTime = DateTime.Today.AddSeconds(LightingManager.time * 120).ToString("h:mm tt");
                 return $"{gameTime.ToLower()}, {Provider.map ?? "Unknown"}";
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide.Unturned {AssemblyVersion} for {Provider.APP_VERSION}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide.Unturned {AssemblyVersion}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)
         {
             input = input.Trim();
-            if (!string.IsNullOrEmpty(input)) Commander.execute(CSteamID.Nil, input);
+            if (!string.IsNullOrEmpty(input))
+            {
+                Commander.execute(CSteamID.Nil, input);
+            }
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
-            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith))
+            {
+                return;
+            }
 
-            var color = ConsoleColor.Gray;
-            var remoteType = "generic";
+            ConsoleColor color = ConsoleColor.Gray;
+            string remoteType = "generic";
 
             if (type == LogType.Warning)
             {

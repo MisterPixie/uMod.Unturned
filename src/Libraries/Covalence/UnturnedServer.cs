@@ -36,9 +36,12 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             {
                 try
                 {
-                    if (address != null) return address;
+                    if (address != null)
+                    {
+                        return address;
+                    }
 
-                    var webClient = new WebClient();
+                    WebClient webClient = new WebClient();
                     IPAddress.TryParse(webClient.DownloadString("http://api.ipify.org"), out address);
                     return address;
                 }
@@ -111,7 +114,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
             // Check if already banned
-            if (IsBanned(id)) return;
+            if (IsBanned(id))
+            {
+                return;
+            }
 
             // Ban and kick user
             Provider.ban(new CSteamID(ulong.Parse(id)), reason, (uint)duration.TotalSeconds);
@@ -123,7 +129,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <param name="id"></param>
         public TimeSpan BanTimeRemaining(string id)
         {
-            var blacklistId = SteamBlacklist.list.First(e => e.playerID.ToString() == id);
+            SteamBlacklistID blacklistId = SteamBlacklist.list.First(e => e.playerID.ToString() == id);
             return TimeSpan.FromSeconds(blacklistId.duration);
         }
 
@@ -149,7 +155,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Unban(string id)
         {
             // Check if unbanned already
-            if (!IsBanned(id)) return;
+            if (!IsBanned(id))
+            {
+                return;
+            }
 
             // Set to unbanned
             SteamBlacklist.unban(new CSteamID(ulong.Parse(id)));
@@ -168,7 +177,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Broadcast(string message, string prefix, params object[] args)
         {
             message = args.Length > 0 ? string.Format(Formatter.ToUnity(message), args) : Formatter.ToUnity(message);
-            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            string formatted = prefix != null ? $"{prefix} {message}" : message;
             ChatManager.sendChat(EChatMode.GLOBAL, formatted);
         }
 
