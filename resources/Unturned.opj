@@ -23,7 +23,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "N/5X5CQ9n56N2DITQQs1LK543MQLFhLHxQLdWhSAwCo=",
+            "MSILHash": "HtPjXbAMVFEu8bEYNmuVKiD8gV3hoAWI8Fgf5Jl/Bww=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -31,7 +31,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 50,
+            "InjectionIndex": 0,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "KWYwWEB0KrVqaMVCdSzRgET7NGXFHsIIIjJAs+QKLWQ=",
+            "MSILHash": "H7QP8EkHK6F6s9mlGV9vGJedlRQxXLE2Yw2ALsV93aA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -52,7 +52,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 51,
+            "InjectionIndex": 1,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "KWYwWEB0KrVqaMVCdSzRgET7NGXFHsIIIjJAs+QKLWQ=",
+            "MSILHash": "H7QP8EkHK6F6s9mlGV9vGJedlRQxXLE2Yw2ALsV93aA=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -153,13 +153,13 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 160,
+            "InjectionIndex": 162,
             "RemoveCount": 1,
             "Instructions": [
               {
                 "OpCode": "ldc_i4",
                 "OpType": "Int32",
-                "Operand": "16"
+                "Operand": "14"
               }
             ],
             "HookTypeName": "Modify",
@@ -174,7 +174,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "4neHpQoFfcvl5rQKpPmMmF/iQxXfu2DiHStcIg8yao0=",
+            "MSILHash": "If7TNOyD622JcWc3W6d4+ol5SkKStdKdAFHR85hie/U=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -182,7 +182,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 254,
+            "InjectionIndex": 239,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -193,7 +193,7 @@
               {
                 "OpCode": "ldc_i4",
                 "OpType": "Int32",
-                "Operand": "15"
+                "Operand": "13"
               },
               {
                 "OpCode": "ldstr",
@@ -218,7 +218,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "4neHpQoFfcvl5rQKpPmMmF/iQxXfu2DiHStcIg8yao0=",
+            "MSILHash": "If7TNOyD622JcWc3W6d4+ol5SkKStdKdAFHR85hie/U=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
