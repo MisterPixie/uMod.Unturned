@@ -50,7 +50,7 @@ namespace Oxide.Game.Unturned
         /// <summary>
         /// Default game-specific references for use in plugins
         /// </summary>
-        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        public override string[] DefaultReferences => new[]
         {
         };
 
