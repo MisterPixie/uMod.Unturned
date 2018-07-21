@@ -5,7 +5,6 @@ using Oxide.Plugins;
 using SDG.Unturned;
 using Steamworks;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -52,6 +51,7 @@ namespace Oxide.Game.Unturned
         /// </summary>
         public override string[] DefaultReferences => new[]
         {
+            ""
         };
 
         /// <summary>
