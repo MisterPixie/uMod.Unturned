@@ -49,7 +49,11 @@
   <Target Name="Clean">
     <RemoveDir Directories="$(ProjectDir)\bin\Bundle\$(PackageId)" Condition="Exists('$(ProjectDir)\bin\Bundle\$(PackageId)')" />
   </Target>
-  <Target Name="Build" Condition="('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir)\.steamlogin')" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
+  <Target Name="BeforeBuild">
+    <Error Condition="$(SteamLogin) == 'required' And ($(STEAM_USERNAME) == '' Or '$(STEAM_PASSWORD)' == '') And !Exists('$(SolutionDir)\.steamlogin')" Text="Missing Steam credentials! Create a .steamlogin file with the username and password in order to download the game files" />
+    <!-- Currently only works on Windows due to Windows-only tools used -->
+    <Exec Command="powershell -ExecutionPolicy Bypass &quot;$(SolutionDir)\Steam.ps1&quot; -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch '$(SteamBranch)' -managed '$(ManagedDir)' -access $(SteamLogin)" />
+  </Target>
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
@@ -57,16 +61,11 @@
       </ReferencePath>
     </ItemGroup>
   </Target>
-  <Target Name="BeforeBuild">
-    <!-- Currently only works on Windows due to Windows-only tools used -->
-    <Exec Command="powershell -ExecutionPolicy Bypass &quot;$(SolutionDir)\Steam.ps1&quot; -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch '$(SteamBranch)' -managed '$(ManagedDir)' -access $(SteamLogin)" />
-  </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
       <CoreFiles Include="$(TargetDir)\Oxide.*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Dependencies\Patched\$(ManagedDir)\Assembly-CSharp.dll" />
       <ContentFiles Include="$(SolutionDir)\packages\oxide.csharp\**\lib\any\*.*" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.references\**\lib\any\*.dll" />
       <ContentFiles Include="$(SolutionDir)\packages\oxide.references\**\lib\any\net35\*.*" />
       <ContentFiles Include="$(SolutionDir)\packages\oxide.mysql\**\lib\any\*.*; $(SolutionDir)\packages\oxide.mysql\**\lib\$(TargetFramework)\*.*" />
       <ContentFiles Include="$(SolutionDir)\packages\oxide.sqlite\**\lib\any\*.*; $(SolutionDir)\packages\oxide.sqlite\**\lib\$(TargetFramework)\*.*" />
@@ -82,7 +81,7 @@
   </Target>
   <Target Name="LocalDeploy" AfterTargets="AfterBuild" Condition="Exists('$(SolutionDir)\.deploy')">
     <Exec Command="start /b /wait taskkill /f /im Unturned.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
-    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="start /b /wait taskkill /f /im Compiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <ReadLinesFromFile File="$(SolutionDir)\.deploy">
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
