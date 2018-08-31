@@ -1,6 +1,6 @@
 {
   "Name": "Unturned",
-  "TargetDirectory": "E:\\Servers\\Unturned\\Unturned_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Unturned\\Unturned_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2P4qvAjada4NZ2r3/xM8QZ6eVCHPNt3GtbIfM3/KA7o=",
+            "MSILHash": "X01mE4WV1dCJsMh7Le974aeN8w22c0/lI3Oed36e4Nw=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2P4qvAjada4NZ2r3/xM8QZ6eVCHPNt3GtbIfM3/KA7o=",
+            "MSILHash": "X01mE4WV1dCJsMh7Le974aeN8w22c0/lI3Oed36e4Nw=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -145,7 +145,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "KBf7GfMQXhYLKXJe/p0HdmJI16Ax7/2PGuQBt5D9uk4=",
+            "MSILHash": "2eSLsFVaLZX7Z1HGYjVZh+zvzhzr0vXMRuzG1x7v/sM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

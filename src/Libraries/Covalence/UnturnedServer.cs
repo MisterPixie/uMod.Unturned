@@ -43,18 +43,18 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
                         if (Utility.ValidateIPv4(providerIp) && !Utility.IsLocalIP(providerIp))
                         {
                             IPAddress.TryParse(providerIp, out address);
-                            Interface.Oxide.LogDebug($"IP address from command-line: {address}");
+                            Interface.Oxide.LogInfo($"IP address from command-line: {address}");
                         }
                         else if (SteamGameServer.GetPublicIP() > 0)
                         {
                             IPAddress.TryParse(Parser.getIPFromUInt32(SteamGameServer.GetPublicIP()), out address);
-                            Interface.Oxide.LogDebug($"IP address from Steam query: {address}");
+                            Interface.Oxide.LogInfo($"IP address from Steam query: {address}");
                         }
                         else
                         {
                             WebClient webClient = new WebClient();
                             IPAddress.TryParse(webClient.DownloadString("http://api.ipify.org"), out address);
-                            Interface.Oxide.LogDebug($"IP address from external API: {address}");
+                            Interface.Oxide.LogInfo($"IP address from external API: {address}");
                         }
                     }
 
