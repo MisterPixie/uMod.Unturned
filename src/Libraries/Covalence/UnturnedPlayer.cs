@@ -1,4 +1,4 @@
-﻿using Oxide.Core;
+using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using SDG.Unturned;
@@ -101,7 +101,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             get
             {
                 SteamBlacklistID steamBlacklistId;
-                return SteamBlacklist.checkBanned(cSteamId, Convert.ToUInt32(Address), out steamBlacklistId);
+                return SteamBlacklist.checkBanned(cSteamId, Parser.getUInt32FromIP(Address), out steamBlacklistId);
             }
         }
 
