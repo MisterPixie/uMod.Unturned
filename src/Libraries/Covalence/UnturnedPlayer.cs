@@ -16,6 +16,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
     public class UnturnedPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
+
         private readonly SteamPlayer steamPlayer;
         private readonly CSteamID cSteamId;
 
@@ -30,13 +31,13 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             // Store user details
             Name = name.Sanitize();
             Id = id.ToString();
+            cSteamId = new CSteamID(id);
         }
 
-        internal UnturnedPlayer(SteamPlayer steamPlayer) : this(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.player.name)
+        internal UnturnedPlayer(SteamPlayer steamPlayer) : this(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.playerID.playerName)
         {
             // Store user object
             this.steamPlayer = steamPlayer;
-            cSteamId = steamPlayer.playerID.steamID;
         }
 
         #region Objects

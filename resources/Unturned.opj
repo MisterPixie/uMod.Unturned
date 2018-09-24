@@ -273,10 +273,44 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerDisconnected [internal]",
+            "HookName": "IOnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "removePlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Byte"
+              ]
+            },
+            "MSILHash": "AgzvsVnokEdQty++4261u91E0j/QRKTeK86AfeTj6j0=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [],
-      "Fields": []
+      "Fields": [
+        {
+          "Name": "IPlayer",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "SDG.Unturned.SteamPlayer",
+          "FieldType": "Oxide.Core|Oxide.Core.Libraries.Covalence.IPlayer",
+          "Flagged": false
+        }
+      ]
     }
   ]
 }

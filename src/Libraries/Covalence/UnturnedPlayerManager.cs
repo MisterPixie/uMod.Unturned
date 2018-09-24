@@ -1,10 +1,9 @@
-﻿extern alias References;
+extern alias References;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using References::ProtoBuf;
 using SDG.Unturned;
-using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,8 +61,9 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
 
         internal void PlayerConnected(SteamPlayer steamPlayer)
         {
-            CSteamID id = steamPlayer.playerID.steamID;
-            connectedPlayers[id.ToString()] = new UnturnedPlayer(steamPlayer);
+            string id = steamPlayer.playerID.steamID.ToString();
+            allPlayers[id] = new UnturnedPlayer(steamPlayer);
+            connectedPlayers[id] = new UnturnedPlayer(steamPlayer);
         }
 
         internal void PlayerDisconnected(SteamPlayer steamPlayer) => connectedPlayers.Remove(steamPlayer.playerID.steamID.ToString());
