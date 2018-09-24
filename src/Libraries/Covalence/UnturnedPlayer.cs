@@ -1,4 +1,4 @@
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using SDG.Unturned;
@@ -87,7 +87,14 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Gets the player's language
         /// </summary>
-        public CultureInfo Language => CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.EnglishName == steamPlayer.language);
+        public CultureInfo Language
+        {
+            get
+            {
+                CultureInfo language = CultureInfo.GetCultures(CultureTypes.AllCultures).First(c => c.EnglishName.StartsWith(steamPlayer.language, StringComparison.InvariantCultureIgnoreCase));
+                return language ?? CultureInfo.GetCultureInfo("en");
+            }
+        }
 
         /// <summary>
         /// Returns if the player is admin
