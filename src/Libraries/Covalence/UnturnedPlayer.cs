@@ -16,6 +16,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
     public class UnturnedPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
+
         private readonly SteamPlayer steamPlayer;
         private readonly CSteamID cSteamId;
 
@@ -30,13 +31,13 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             // Store user details
             Name = name.Sanitize();
             Id = id.ToString();
+            cSteamId = new CSteamID(id);
         }
 
-        internal UnturnedPlayer(SteamPlayer steamPlayer) : this(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.player.name)
+        internal UnturnedPlayer(SteamPlayer steamPlayer) : this(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.playerID.playerName)
         {
             // Store user object
             this.steamPlayer = steamPlayer;
-            cSteamId = steamPlayer.playerID.steamID;
         }
 
         #region Objects
@@ -86,7 +87,14 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Gets the player's language
         /// </summary>
-        public CultureInfo Language => CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.EnglishName == steamPlayer.language);
+        public CultureInfo Language
+        {
+            get
+            {
+                CultureInfo language = CultureInfo.GetCultures(CultureTypes.AllCultures).First(c => c.EnglishName.StartsWith(steamPlayer.language, StringComparison.InvariantCultureIgnoreCase));
+                return language ?? CultureInfo.GetCultureInfo("en");
+            }
+        }
 
         /// <summary>
         /// Returns if the player is admin
@@ -101,7 +109,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             get
             {
                 SteamBlacklistID steamBlacklistId;
-                return SteamBlacklist.checkBanned(cSteamId, Convert.ToUInt32(Address), out steamBlacklistId);
+                return SteamBlacklist.checkBanned(cSteamId, Parser.getUInt32FromIP(Address), out steamBlacklistId);
             }
         }
 

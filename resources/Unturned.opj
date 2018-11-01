@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "X01mE4WV1dCJsMh7Le974aeN8w22c0/lI3Oed36e4Nw=",
+            "MSILHash": "0QIw1DGRlKqqdiIBVO+lhfSyPDyT52WX5goA00Rs+F8=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "X01mE4WV1dCJsMh7Le974aeN8w22c0/lI3Oed36e4Nw=",
+            "MSILHash": "0QIw1DGRlKqqdiIBVO+lhfSyPDyT52WX5goA00Rs+F8=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -121,7 +121,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "5N1Z1UF4MmocoQUGk4U1Fp6/CMjOOJHhUG5fkPaBhEc=",
+            "MSILHash": "6UpatUwyrlW1ZymlAPwCdWrns730yRa0deRc+BkW0i0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -145,7 +145,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2eSLsFVaLZX7Z1HGYjVZh+zvzhzr0vXMRuzG1x7v/sM=",
+            "MSILHash": "ccIbULZ5M4cF9beH62SR8NIA19V2dhc4IiC3qKuDsFM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -226,13 +226,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 228,
+            "InjectionIndex": 235,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0",
+            "ArgumentString": "l8",
             "HookTypeName": "Simple",
-            "Name": "IOnPlayerInit [internal]",
-            "HookName": "IOnPlayerInit",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
@@ -269,14 +269,48 @@
                 "Steamworks.CSteamID"
               ]
             },
-            "MSILHash": "f2SZr1TH0j1+K9GHsYGPXFPXuDzw4PdoAZ53GWkYHdQ=",
+            "MSILHash": "cf1WMm7GZ49GV5LW7To9ATJeHaUY3L5yvpdsC0AE6HI=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerDisconnected [internal]",
+            "HookName": "IOnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "removePlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Byte"
+              ]
+            },
+            "MSILHash": "AgzvsVnokEdQty++4261u91E0j/QRKTeK86AfeTj6j0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
         }
       ],
       "Modifiers": [],
-      "Fields": []
+      "Fields": [
+        {
+          "Name": "IPlayer",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "SDG.Unturned.SteamPlayer",
+          "FieldType": "Oxide.Core|Oxide.Core.Libraries.Covalence.IPlayer",
+          "Flagged": false
+        }
+      ]
     }
   ]
 }

@@ -25,7 +25,7 @@ namespace Oxide.Game.Unturned
             // Update player's permissions group and name
             if (permission.IsLoaded)
             {
-                permission.UpdateNickname(id, steamPlayer.player.name);
+                permission.UpdateNickname(id, steamPlayer.playerID.playerName);
                 OxideConfig.DefaultGroups defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
                 if (!permission.UserHasGroup(id, defaultGroups.Players))
                 {
@@ -38,13 +38,42 @@ namespace Oxide.Game.Unturned
                 }
             }
 
-            Covalence.PlayerManager.PlayerJoin(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.player.name); // TODO: Move to OnUserApprove hook once available
+            // Let covalence know
+            Covalence.PlayerManager.PlayerJoin(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.playerID.playerName); // TODO: Move to OnUserApprove hook once available
             Covalence.PlayerManager.PlayerConnected(steamPlayer);
-            IPlayer iplayer = Covalence.PlayerManager.FindPlayerById(id);
-            if (iplayer != null)
+
+            IPlayer player = Covalence.PlayerManager.FindPlayerById(id);
+            if (player != null)
             {
-                Interface.Call("OnUserConnected", iplayer);
+                // Set IPlayer object on SteamPlayer
+                steamPlayer.IPlayer = player;
+
+                // Call universal hook
+                Interface.Call("OnUserConnected", player);
             }
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="index"></param>
+        [HookMethod("IOnPlayerDisconnected")]
+        private void IOnPlayerDisconnected(byte index)
+        {
+            SteamPlayer steamPlayer = Provider.clients[index];
+
+            // Call hook for plugins
+            Interface.Call("OnPlayerDisconnected", steamPlayer);
+
+            IPlayer player = steamPlayer.IPlayer;
+            if (player != null)
+            {
+                // Call universal hook
+                Interface.Call("OnUserDisconnected", player);
+            }
+
+            // Let covalence know
+            Covalence.PlayerManager.PlayerDisconnected(steamPlayer);
         }
 
         #endregion Player Hooks
