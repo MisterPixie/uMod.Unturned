@@ -1,15 +1,14 @@
-﻿using Oxide.Core;
-using Oxide.Core.Configuration;
-using Oxide.Core.Libraries.Covalence;
-using Oxide.Core.Plugins;
-using SDG.Unturned;
+﻿using SDG.Unturned;
+using uMod.Configuration;
+using uMod.Libraries.Universal;
+using uMod.Plugins;
 
-namespace Oxide.Game.Unturned
+namespace uMod.Unturned
 {
     /// <summary>
     /// Game hooks and wrappers for the core Unturned plugin
     /// </summary>
-    public partial class UnturnedCore
+    public partial class Unturned
     {
         #region Player Hooks
 
@@ -20,36 +19,37 @@ namespace Oxide.Game.Unturned
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(SteamPlayer steamPlayer)
         {
-            string id = steamPlayer.playerID.steamID.ToString();
+            string userId = steamPlayer.playerID.steamID.ToString();
 
-            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
-                permission.UpdateNickname(id, steamPlayer.playerID.playerName);
-                OxideConfig.DefaultGroups defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
-                if (!permission.UserHasGroup(id, defaultGroups.Players))
-                {
-                    permission.AddUserGroup(id, defaultGroups.Players);
-                }
+                // Update player's stored username
+                permission.UpdateNickname(userId, steamPlayer.playerID.playerName);
 
-                if (steamPlayer.isAdmin && !permission.UserHasGroup(id, defaultGroups.Administrators))
+                // Set default groups, if necessary
+                uModConfig.DefaultGroups defaultGroups = Interface.uMod.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(userId, defaultGroups.Players))
                 {
-                    permission.AddUserGroup(id, defaultGroups.Administrators);
+                    permission.AddUserGroup(userId, defaultGroups.Players);
+                }
+                if (steamPlayer.isAdmin && !permission.UserHasGroup(userId, defaultGroups.Administrators))
+                {
+                    permission.AddUserGroup(userId, defaultGroups.Administrators);
                 }
             }
 
-            // Let covalence know
-            Covalence.PlayerManager.PlayerJoin(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.playerID.playerName); // TODO: Move to OnUserApprove hook once available
-            Covalence.PlayerManager.PlayerConnected(steamPlayer);
+            // Let universal know
+            Universal.PlayerManager.PlayerJoin(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.playerID.playerName); // TODO: Move to OnUserApprove hook once available
+            Universal.PlayerManager.PlayerConnected(steamPlayer);
 
-            IPlayer player = Covalence.PlayerManager.FindPlayerById(id);
+            IPlayer player = Universal.PlayerManager.FindPlayerById(userId);
             if (player != null)
             {
                 // Set IPlayer object on SteamPlayer
                 steamPlayer.IPlayer = player;
 
                 // Call universal hook
-                Interface.Call("OnUserConnected", player);
+                Interface.Call("OnPlayerConnected", player);
             }
         }
 
@@ -60,20 +60,21 @@ namespace Oxide.Game.Unturned
         [HookMethod("IOnPlayerDisconnected")]
         private void IOnPlayerDisconnected(byte index)
         {
+            // Get SteamPlayer object
             SteamPlayer steamPlayer = Provider.clients[index];
 
-            // Call hook for plugins
+            // Let universal know
+            Universal.PlayerManager.PlayerDisconnected(steamPlayer);
+
+            // Call game-specific hook
             Interface.Call("OnPlayerDisconnected", steamPlayer);
 
             IPlayer player = steamPlayer.IPlayer;
             if (player != null)
             {
                 // Call universal hook
-                Interface.Call("OnUserDisconnected", player);
+                Interface.Call("OnPlayerDisconnected", player);
             }
-
-            // Let covalence know
-            Covalence.PlayerManager.PlayerDisconnected(steamPlayer);
         }
 
         #endregion Player Hooks

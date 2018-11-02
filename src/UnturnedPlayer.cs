@@ -1,14 +1,13 @@
-﻿using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
-using SDG.Unturned;
+﻿using SDG.Unturned;
 using Steamworks;
 using System;
 using System.Globalization;
 using System.Linq;
+using uMod.Libraries;
+using uMod.Libraries.Universal;
 using UnityEngine;
 
-namespace Oxide.Game.Unturned.Libraries.Covalence
+namespace uMod.Unturned
 {
     /// <summary>
     /// Represents a player, either connected or not
@@ -25,7 +24,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             // Get perms library
             if (libPerms == null)
             {
-                libPerms = Interface.Oxide.GetLibrary<Permission>();
+                libPerms = Interface.uMod.GetLibrary<Permission>();
             }
 
             // Store user details
@@ -104,14 +103,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Gets if the player is banned
         /// </summary>
-        public bool IsBanned
-        {
-            get
-            {
-                SteamBlacklistID steamBlacklistId;
-                return SteamBlacklist.checkBanned(cSteamId, Parser.getUInt32FromIP(Address), out steamBlacklistId);
-            }
-        }
+        public bool IsBanned => SteamBlacklist.checkBanned(cSteamId, Parser.getUInt32FromIP(Address), out SteamBlacklistID _);
 
         /// <summary>
         /// Returns if the player is connected
@@ -140,13 +132,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
             // Check if already banned
-            if (IsBanned)
+            if (!IsBanned)
             {
-                return;
+                // Ban and kick user
+                Provider.ban(cSteamId, reason, (uint)duration.TotalSeconds);
             }
-
-            // Ban and kick user
-            Provider.ban(cSteamId, reason, (uint)duration.TotalSeconds);
         }
 
         /// <summary>
@@ -182,8 +172,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <param name="amount"></param>
         public void Hurt(float amount)
         {
-            EPlayerKill ePlayerKill;
-            steamPlayer.player.life.askDamage((byte)amount, Vector3.up * amount, EDeathCause.KILL, ELimb.SKULL, CSteamID.Nil, out ePlayerKill);
+            steamPlayer.player.life.askDamage((byte)amount, Vector3.up * amount, EDeathCause.KILL, ELimb.SKULL, CSteamID.Nil, out EPlayerKill _);
         }
 
         /// <summary>
@@ -202,10 +191,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public float MaxHealth
         {
-            get
-            {
-                return 100f; // TODO: Implement when possible
-            }
+            get => 100f; // TODO: Implement when possible
             set
             {
                 // TODO: Implement when possible
@@ -245,13 +231,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Unban()
         {
             // Check if unbanned already
-            if (!IsBanned)
+            if (IsBanned)
             {
-                return;
+                // Set to unbanned
+                SteamBlacklist.unban(cSteamId);
             }
-
-            // Set to unbanned
-            SteamBlacklist.unban(cSteamId);
         }
 
         #endregion Administration
@@ -324,7 +308,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => Commander.execute(cSteamId, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
+        public void Command(string command, params object[] args)
+        {
+            Commander.execute(cSteamId, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
+        }
 
         #endregion Chat and Commands
 
@@ -396,7 +383,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Returns a human readable string representation of this IPlayer
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Covalence.UnturnedPlayer[{Id}, {Name}]";
+        public override string ToString() => $"UnturnedPlayer[{Id}, {Name}]";
 
         #endregion Operator Overloads
     }

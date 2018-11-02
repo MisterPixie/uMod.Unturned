@@ -1,13 +1,13 @@
-﻿using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
-using SDG.Unturned;
+﻿using SDG.Unturned;
 using Steamworks;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using uMod.Libraries.Universal;
+using uMod.Logging;
 
-namespace Oxide.Game.Unturned.Libraries.Covalence
+namespace uMod.Unturned
 {
     /// <summary>
     /// Represents the server hosting the game instance
@@ -21,8 +21,8 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return Provider.serverName; }
-            set { Provider.serverName = value; }
+            get => Provider.serverName;
+            set => Provider.serverName = value;
         }
 
         private static IPAddress address;
@@ -43,18 +43,18 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
                         if (Utility.ValidateIPv4(providerIp) && !Utility.IsLocalIP(providerIp))
                         {
                             IPAddress.TryParse(providerIp, out address);
-                            Interface.Oxide.LogInfo($"IP address from command-line: {address}");
+                            Interface.uMod.LogInfo($"IP address from command-line: {address}");
                         }
                         else if (SteamGameServer.GetPublicIP() > 0)
                         {
                             IPAddress.TryParse(Parser.getIPFromUInt32(SteamGameServer.GetPublicIP()), out address);
-                            Interface.Oxide.LogInfo($"IP address from Steam query: {address}");
+                            Interface.uMod.LogInfo($"IP address from Steam query: {address}");
                         }
                         else
                         {
                             WebClient webClient = new WebClient();
                             IPAddress.TryParse(webClient.DownloadString("http://api.ipify.org"), out address);
-                            Interface.Oxide.LogInfo($"IP address from external API: {address}");
+                            Interface.uMod.LogInfo($"IP address from external API: {address}");
                         }
                     }
 
@@ -117,8 +117,8 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public int MaxPlayers
         {
-            get { return Provider.maxPlayers; }
-            set { Provider.maxPlayers = (byte)value; }
+            get => Provider.maxPlayers;
+            set => Provider.maxPlayers = (byte)value;
         }
 
         /// <summary>
@@ -126,8 +126,8 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return DateTime.Today.AddSeconds(LightingManager.time * 120); }
-            set { LightingManager.time = (uint)(value.Second / 120); }
+            get => DateTime.Today.AddSeconds(LightingManager.time * 120);
+            set => LightingManager.time = (uint)(value.Second / 120);
         }
 
         /// <summary>
@@ -148,13 +148,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
             // Check if already banned
-            if (IsBanned(id))
+            if (!IsBanned(id))
             {
-                return;
+                // Ban and kick user
+                Provider.ban(new CSteamID(ulong.Parse(id)), reason, (uint)duration.TotalSeconds);
             }
-
-            // Ban and kick user
-            Provider.ban(new CSteamID(ulong.Parse(id)), reason, (uint)duration.TotalSeconds);
         }
 
         /// <summary>
@@ -171,11 +169,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Gets if the player is banned
         /// </summary>
         /// <param name="id"></param>
-        public bool IsBanned(string id)
-        {
-            SteamBlacklistID steamBlacklistId;
-            return SteamBlacklist.checkBanned(new CSteamID(ulong.Parse(id)), 0, out steamBlacklistId); // TODO: Might need actual player IP
-        }
+        public bool IsBanned(string id) => SteamBlacklist.checkBanned(new CSteamID(ulong.Parse(id)), 0, out SteamBlacklistID _);
 
         /// <summary>
         /// Saves the server and any related information
@@ -189,13 +183,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public void Unban(string id)
         {
             // Check if unbanned already
-            if (!IsBanned(id))
+            if (IsBanned(id))
             {
-                return;
+                // Set to unbanned
+                SteamBlacklist.unban(new CSteamID(ulong.Parse(id)));
             }
-
-            // Set to unbanned
-            SteamBlacklist.unban(new CSteamID(ulong.Parse(id)));
         }
 
         #endregion Administration

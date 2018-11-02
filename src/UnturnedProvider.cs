@@ -1,11 +1,11 @@
-﻿using Oxide.Core.Libraries.Covalence;
+﻿using uMod.Libraries.Universal;
 
-namespace Oxide.Game.Unturned.Libraries.Covalence
+namespace uMod.Unturned
 {
     /// <summary>
-    /// Provides Covalence functionality for the game "Unturned"
+    /// Provides Universal functionality for the game "Unturned"
     /// </summary>
-    public class UnturnedCovalenceProvider : ICovalenceProvider
+    public class UnturnedProvider : IUniversalProvider
     {
         /// <summary>
         /// Gets the name of the game for which this provider provides
@@ -25,9 +25,9 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
-        internal static UnturnedCovalenceProvider Instance { get; private set; }
+        internal static UnturnedProvider Instance { get; private set; }
 
-        public UnturnedCovalenceProvider()
+        public UnturnedProvider()
         {
             Instance = this;
         }
@@ -40,7 +40,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Gets the command system provider
         /// </summary>
-        public UnturnedCommandSystem CommandSystem { get; private set; }
+        public UnturnedCommands CommandSystem { get; private set; }
 
         /// <summary>
         /// Creates the game-specific server object
@@ -63,10 +63,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Creates the game-specific command system provider object
         /// </summary>
         /// <returns></returns>
-        public ICommandSystem CreateCommandSystemProvider() => CommandSystem = new UnturnedCommandSystem();
+        public ICommandSystem CreateCommandSystemProvider() => CommandSystem = new UnturnedCommands();
 
         /// <summary>
-        /// Formats the text with markup as specified in Oxide.Core.Libraries.Covalence.Formatter
+        /// Formats the text with markup as specified in uMod.Libraries.Formatter
         /// into the game-specific markup language
         /// </summary>
         /// <param name="text">text to format</param>

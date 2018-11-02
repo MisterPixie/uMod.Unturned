@@ -1,13 +1,13 @@
-﻿using Oxide.Core.Plugins;
-using System;
+﻿using System;
+using uMod.Plugins;
 
-namespace Oxide.Game.Unturned
+namespace uMod.Unturned
 {
     /// <summary>
-    /// Responsible for loading core plugins for "Unturned"
+    /// Responsible for loading the core Unturned plugin
     /// </summary>
     public class UnturnedPluginLoader : PluginLoader
     {
-        public override Type[] CorePlugins => new[] { typeof(UnturnedCore) };
+        public override Type[] CorePlugins => new[] { typeof(Unturned) };
     }
 }

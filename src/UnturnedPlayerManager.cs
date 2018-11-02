@@ -1,14 +1,13 @@
 extern alias References;
 
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 using References::ProtoBuf;
 using SDG.Unturned;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using uMod.Libraries.Universal;
 
-namespace Oxide.Game.Unturned.Libraries.Covalence
+namespace uMod.Unturned
 {
     /// <summary>
     /// Represents a generic player manager
@@ -25,11 +24,12 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         private IDictionary<string, PlayerRecord> playerData;
         private IDictionary<string, UnturnedPlayer> allPlayers;
         private IDictionary<string, UnturnedPlayer> connectedPlayers;
+        private const string dataFileName = "umod";
 
         internal void Initialize()
         {
-            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
-            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
+            // TODO: Migrate/move from oxide.covalence.data to umod.data if SQLite is not used, else migrate to umod.db with SQLite
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>(dataFileName) ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, UnturnedPlayer>();
             connectedPlayers = new Dictionary<string, UnturnedPlayer>();
 
@@ -43,8 +43,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         {
             string id = userId.ToString();
 
-            PlayerRecord record;
-            if (playerData.TryGetValue(id, out record))
+            if (playerData.TryGetValue(id, out PlayerRecord record))
             {
                 record.Name = name;
                 playerData[id] = record;
@@ -68,7 +67,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
 
         internal void PlayerDisconnected(SteamPlayer steamPlayer) => connectedPlayers.Remove(steamPlayer.playerID.steamID.ToString());
 
-        internal void SavePlayerData() => ProtoStorage.Save(playerData, "oxide.covalence");
+        internal void SavePlayerData() => ProtoStorage.Save(playerData, dataFileName);
 
         #region Player Finding
 
