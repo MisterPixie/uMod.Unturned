@@ -1,4 +1,4 @@
-﻿using SDG.Unturned;
+using SDG.Unturned;
 using Steamworks;
 using System;
 using System.Collections.Generic;
@@ -116,13 +116,10 @@ namespace uMod.Unturned
         {
             CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
 
-            // Limit FPS to reduce CPU usage
-            Application.targetFrameRate = 256;
+            Application.logMessageReceived += HandleLog;
 
             if (Interface.uMod.EnableConsole())
             {
-                Application.logMessageReceived += HandleLog;
-
                 Interface.uMod.ServerConsole.Input += ServerConsoleOnInput;
             }
         }

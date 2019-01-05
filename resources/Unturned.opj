@@ -8,8 +8,8 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 15,
-            "RemoveCount": 4,
+            "InjectionIndex": 17,
+            "RemoveCount": 2,
             "Instructions": [],
             "HookTypeName": "Modify",
             "Name": "DisableConsole [patch]",
@@ -226,10 +226,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 235,
+            "InjectionIndex": 250,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l8",
+            "ArgumentString": "l9",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
@@ -269,7 +269,7 @@
                 "Steamworks.CSteamID"
               ]
             },
-            "MSILHash": "cf1WMm7GZ49GV5LW7To9ATJeHaUY3L5yvpdsC0AE6HI=",
+            "MSILHash": "XilX13MBkCveI5ypmlbNOzq+ZWap7pnrP+Cp818x+aw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

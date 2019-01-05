@@ -5,12 +5,12 @@
     <Version>3.0.0</Version>
     <AssemblyName>uMod.Unturned</AssemblyName>
     <Authors>The uMod Project Team and Contributors</Authors>
-    <Description>Unturned extension for the uMod modding framework</Description>
-    <RepositoryUrl>https://github.com/theumod/uMod.Unturned</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/theumod/uMod.Unturned</PackageProjectUrl>
-    <PackageIconUrl>https://assets.umod.org/images/umod-64.png</PackageIconUrl>
     <Copyright>Copyright (c) 2013-$([System.DateTime]::Now.Year) $(Authors)</Copyright>
+    <Description>Unturned game extension for the uMod modding framework</Description>
+    <PackageIconUrl>https://assets.umod.org/images/umod-64.png</PackageIconUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://umod.org</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/theumod/uMod.Unturned</RepositoryUrl>
     <PackageTags>gaming modding plugins unity unity3d</PackageTags>
     <ThisAssemblyNamespace>$(AssemblyName)</ThisAssemblyNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -33,7 +33,7 @@
     <PackageReference Include="Oxide.References" Version="2.0.*">
       <PrivateAssets>contentfiles;analyzers;build</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="uMod" Version="3.0.3903-develop" />
+    <PackageReference Include="uMod" Version="3.0.3906-develop" />
     <!--<PackageReference Include="uMod.MySql" Version="3.0.*" />
     <PackageReference Include="uMod.SQLite" Version="3.0.*" />-->
     <PackageReference Include="uMod.Unity" Version="3.0.3765-develop" />
@@ -49,7 +49,7 @@
     <Reference Include="UnityEngine">
       <HintPath>Dependencies\Patched\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
-    <None Remove="Bundle\**; Files\**; Patched\**; **\Original\**; *.config; *.opj" />
+    <None Remove="Bundle\**; Dependencies\**; Files\**; Patched\**; **\Original\**; *.config; *.opj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="Clean">
@@ -72,7 +72,7 @@
       <CoreFiles Include="$(TargetDir)\uMod*.dll; $(TargetDir)\Oxide.*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Dependencies\Base\*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Dependencies\Patched\$(ManagedDir)\Assembly-CSharp.dll" />
-      <ContentFiles Include="$(SolutionDir)\packages\oxide.references\**\lib\any\net46\*.*" />
+      <ContentFiles Include="$(SolutionDir)\packages\oxide.references\**\lib\any\$(TargetFramework)\*.*" />
       <ContentFiles Include="$(SolutionDir)\packages\umod.mysql\**\lib\any\MySql.*.dll; $(SolutionDir)\packages\umod.mysql\**\lib\any\System.*.dll" />
       <ContentFiles Include="$(SolutionDir)\packages\umod.mysql\**\lib\$(TargetFramework)\*.*" />
       <ContentFiles Include="$(SolutionDir)\packages\umod.sqlite\**\lib\any\*.*; $(SolutionDir)\packages\umod.sqlite\**\lib\$(TargetFramework)\*.*" />
